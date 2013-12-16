@@ -110,7 +110,7 @@ else:
 		display:inline-block;	
 	}
 	.questiondiv {
-	  height:115px; width:75%; 
+	  height:105px; width:75%; 
 	  color:white;
 	  //border-color:maroon; 
 	  //border-style:solid; 
@@ -119,13 +119,13 @@ else:
 	  background-color:#4852B7
 	}
 	.dimdiv {
-          height:80px; width:75%;
+          height:60px; width:75%;
           color:white;
           //border-color:maroon;
           //border-style:solid;
           //border-width:1px;
           //float:left;
-          background-color:#00FFFF
+          background-color:#483D8B
         }
 	.label { 		 
 		 margin-left: 15px;
@@ -155,14 +155,10 @@ else:
 	else:
 		nextthing='demographics.py'       	
 	#print "main loop"
-       	print "<center><b>Question %s/%s:</b><br><br>" % (qindex, totalqpersubj)
-       	print "<div class=questiondiv><center>%s <br><br></div> " % (question)
-	print "<div class=dimdiv><center><br>%s</div>" %(dquest)
-	print '''
-        <div id="page_content" align="center">
-        <form name="myform" action="%s" method="submit" onSubmit="return validate(myform)">
-        <div class="radioLeft" align="center">
-        ''' %(nextthing)
+       	print '<center><b>Question %s/%s:</b><br><br>' % (qindex, totalqpersubj)
+       	print '<div class=questiondiv><center>%s <br><br></div>' % (question)
+	print '<div class=dimdiv><center><br>%s</div>' %(dquest)
+	print '<div id="page_content" align="center"><form name="myform" action="%s" method="submit" onSubmit="return validate(myform)"></div>'%(nextthing)
 	def make_checkarray(emotionlist):
 		numemos=len(emotionlist)
 		#numcols=math.floor(math.sqrt(numemos))
@@ -181,11 +177,11 @@ else:
 			print '<div class="radioLeft" align="center">'
 			for e in c:
 				print e
-			print "</div>"
-	if dquest!="How is mary feeling":
-		print 'hello'
-		#print '(please use the following scale: 0=<b>'+mintag+'</b>, 5=<b>'+midtag+'</b>,10=<b>'+maxtag+'</b>)Ã 
-		#print '<div style="padding: 10px;">%s<input style="width:700px;" type="range" name="response" value="5" min="0" max="10" step="1" id="slider1"/>%s</div>'%(mintag,maxtag)
+			print '</div>'
+	if dquest!='How is mary feeling':
+		#print 'hello'
+		print '(please use the following scale: 0=<b>'+mintag+'</b>, 5=<b>'+midtag+'</b>,10=<b>'+maxtag+'</b>)' 
+		print '<div style="padding: 10px;">%s<input style="width:700px;" type="range" name="response" value="5" min="0" max="10" step="1" id="slider1"/>%s</div>'%(mintag,maxtag)
 	else:
 		make_checkarray(emolist)
 	
