@@ -24,12 +24,14 @@ print '''
 #cgitb.enable(display=0, logdir="/path/to/logdir")
 theids=myform.keys() 
 subjid = myform['subjid'].value
+questionID=subjid[subjid.index('q'):subjid.index('q')+3]
+qnum=int(questionID[1:])-1 
 qindex=myform['qindex'].value
 dnums=myform['dnums'].value
 keycode=myform['keycode'].value
-qnums=eval(qnums)
+dnums=eval(dnums)
 qindex=int(qindex)+1
-emoans=emoanswers[qnums[int(qindex)-2]]
+emoans=emoanswers[qnum]
 #print "<p>these are the ids: %s </p>" %(theids)
 herresponse=myform['response'].value
 #print "<p>previous response: %s </p>" %(herresponse)

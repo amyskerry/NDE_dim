@@ -164,7 +164,10 @@ else:
 		buckets=[[] for i in range(0,numcols)]
 		for n, emo in enumerate(emotionlist):
 			col=int(n%numcols)
-			emostring='<br><input type="radio" name="response" value="%s"><label for="%s">%s</label>' % (emo,emo,emo)
+			if n==0:
+				emostring='<br><input type="radio" name="response" value="%s" checked><label for="%s">%s</label>' % (emo,emo,emo)
+			else:
+				emostring='<br><input type="radio" name="response" value="%s"><label for="%s">%s</label>' % (emo,emo,emo)
 			buckets[col].append(emostring)
 		mainprintout=[]
 		for c in buckets:
@@ -172,8 +175,10 @@ else:
 			for e in c:
 				print e
 			print '</div>'
-	emoquest='How did NAMEVAR feel in this situation'
+	emoquest='How did NAMEVAR feel in this situation?'
 	emoquest=emoquest.replace('NAMEVAR',qname)
+	#print dquest
+	#print emoquest
 	if dquest!=emoquest:
 		#print 'hello'
 		print '(please use the following scale: 0=<b>'+mintag+'</b>, 5=<b>'+midtag+'</b>, 10=<b>'+maxtag+'</b>)' 
