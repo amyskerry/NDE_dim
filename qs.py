@@ -20,6 +20,7 @@ def getconfiguration(configfile):
 def getquestions(stimfile):
     questions=[]
     itemlabels=[]
+    emoanswers=[]
     with open(stimfile, 'rU') as csvfile:
         reader = csv.reader(csvfile)
         count=0
@@ -28,6 +29,7 @@ def getquestions(stimfile):
                 colnames=row
                 print 'varnames in csv: '+str(colnames)
                 questionindex=colnames.index('cause')
+                emoanswerindex=colnames.index('emotion')
                 incindex=colnames.index('keeper')
             else:
                 subjdata=row
@@ -38,11 +40,12 @@ def getquestions(stimfile):
                     questions.append(quest)
                     count=count+1
                     itemlabels.append('q'+str(count))
-    return questions, itemlabels
+                    emoanswers.append(subjdata[emoanswerindex])
+    return questions, itemlabels, emoanswers
                     
 #stimfile='/Users/amyskerry/Documents/projects/turk/NDE/NDE_stims.csv'
 #configfile='/Users/amyskerry/Documents/projects/turk/NDE/config.csv'
 stimfile='NDE_stims.csv'
 configfile='config.csv'
 [emolist, names]=getconfiguration(configfile)
-[questions, itemlabels]=getquestions(stimfile)
+[questions, itemlabels, emoanswers]=getquestions(stimfile)
