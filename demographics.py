@@ -38,14 +38,17 @@ lastQ=str(dnums[int(qindex)-2])
 formindex=myform['rownum'].value 
 lastresponse=myform['response'].value
 lastitem=myform['item'].value
-qvar='q'+ lastQ+'_'
-qvardim=qvar+dimension
-qvaritem=qvar+dimension+'_emo'
+lastanswer=myform['correctans'].value
+lastdim=myform['dlabel'].value
+qvardim=lastdim    
+qvaremo=lastdim+'_qemo'
+qvaritem=lastdim+'_qlabel'
 sql='update NDE_dims set ' +qvardim +' ="'+lastresponse+'" where rownum="'+formindex+'"'
 cursor.execute(sql)
 sql='update NDE_dims set ' +qvaritem +' ="'+lastitem+'" where rownum="'+formindex+'"'
 cursor.execute(sql)
-
+sql='update NDE_dims set ' +qvaremo +' ="'+lastanswer+'" where rownum="'+formindex+'"'
+cursor.execute(sql)
 ### css setup
 print '''
 <head><title>Research Study: Demographics</title>

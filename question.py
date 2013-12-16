@@ -5,7 +5,7 @@ import cgitb, cgi, MySQLdb, ast
 import cPickle as p
 from random import randint, shuffle
 from ast import literal_eval
-from qs import questions, names, emolist, itemlabels
+from qs import questions, names, emolist,emoanswers, itemlabels
 from slist import subjects, keycodes
 import getdims
 import math
@@ -50,12 +50,13 @@ else:
       	dnum=dnums[qindex-1]
 	totalqpersubj=len(dnums)
       	thisdim=dimdata[dnum-1]
-      	mintag=thisdim[minindex]
+	mintag=thisdim[minindex]
       	midtag=thisdim[midindex]
       	maxtag=thisdim[maxindex]
-      	qlabel=thisdim[qlabelindex]
+      	dlabel=thisdim[qlabelindex]
       	dquest=thisdim[Qindex]
       	question=questions[qnum]
+	emoans=emoanswers[qnum]
 	qname=names[qindex-1]
       	dquest=dquest.replace('NAMEVAR', qname)
 	itemlabel=itemlabels[qnum]
@@ -80,12 +81,16 @@ else:
                 formindex=myform['rownum'].value
        		lastresponse=myform['response'].value
                 lastitem=myform['item'].value
-       		qvar='q'+ lastQ+'_'
-                qvardim=qvar+dimension
-       		qvaritem=qvar+dimension+'_emo'
+       		lastanswer=myform['correctans'].value
+                lastdim=myform['dlabel'].value
+		qvardim=lastdim
+		qvaremo=lastdim+'_qemo'
+       		qvaritem=lastdim+'_qlabel'
        		sql='update NDE_dims set ' +qvardim +' ="'+lastresponse+'" where rownum="'+formindex+'"'
        		cursor.execute(sql)
        		sql='update NDE_dims set ' +qvaritem +' ="'+lastitem+'" where rownum="'+formindex+'"'
+       		cursor.execute(sql)
+       		sql='update NDE_dims set ' +qvaremo +' ="'+lastanswer+'" where rownum="'+formindex+'"'
        		cursor.execute(sql)
         ### css setup
         print '''
@@ -133,19 +138,6 @@ else:
 
 	}
 	</style>
-	<script type="text/javascript">
-        function validate(myform){
-            if (!checkRadioArray(myform.response)) {alert('Please enter your rating!');return false;}
-            return true;
-        }
-        function checkRadioArray(radioButtons){
-            for (var i=0; i< radioButtons.length; i++) {
-                if (radioButtons[i].checked) return true;
-            }
-            return false;
-        }
-        
-        </script>
         </head>
 	'''
         ####end of setup
@@ -158,7 +150,7 @@ else:
        	print '<center><b>Question %s/%s:</b><br><br>' % (qindex, totalqpersubj)
        	print '<div class=questiondiv><center>%s <br><br></div>' % (question)
 	print '<div class=dimdiv><center><br>%s</div>' %(dquest)
-	print '<div id="page_content" align="center"><form name="myform" action="%s" method="submit" onSubmit="return validate(myform)"></div>'%(nextthing)
+	print '<div id="page_content" align="center"><form name="myform" action="%s" method="submit"o></div>'%(nextthing)
 	def make_checkarray(emotionlist):
 		numemos=len(emotionlist)
 		#numcols=math.floor(math.sqrt(numemos))
@@ -189,10 +181,12 @@ else:
 	<br><br>
         <input type="hidden" name="subjid" value="'''+subjid+'''">
 	<input type="hidden" name="item" value="'''+itemlabel+'''">
+	<input type="hidden" name="correctans" value="'''+emoans+'''">
         <input type="hidden" name="keycode" value="'''+keycode+'''">       	
         <input type="hidden" name="qindex" value="'''+qindex+'''">
         <input type="hidden" name="dnums" value="'''+dnumlist+'''"> 
         <input type="hidden" name="rownum" value="'''+formindex+'''"> 	
+        <input type="hidden" name="dlabel" value="'''+dlabel+'''"> 	
         <input type="submit" value="Continue" /></center>
         <br><br><br><br>
         </form>
