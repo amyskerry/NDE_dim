@@ -6,7 +6,7 @@ Created on Mon Dec 16 11:13:12 2013
 """
 
 import csv
-dimfile='appraisals.csv'
+
 dimfile='/Users/amyskerry/Documents/projects/turk/NDE_dim/appraisals.csv'
 
 def extractdims(datafile):

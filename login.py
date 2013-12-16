@@ -5,7 +5,7 @@ import cgitb, cgi, MySQLdb, ast
 import cPickle as p
 from random import randint, shuffle
 from ast import literal_eval
-from qs import questions, blacklist
+from qs import questions
 from getdims import extractdims
 
 myform=cgi.FieldStorage()
