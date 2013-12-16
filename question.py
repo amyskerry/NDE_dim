@@ -180,8 +180,8 @@ else:
 			print '</div>'
 	if dquest!='How is mary feeling':
 		#print 'hello'
-		print '(please use the following scale: 0=<b>'+mintag+'</b>, 5=<b>'+midtag+'</b>,10=<b>'+maxtag+'</b>)' 
-		print '<div style="padding: 10px;">%s<input style="width:700px;" type="range" name="response" value="5" min="0" max="10" step="1" id="slider1"/>%s</div>'%(mintag,maxtag)
+		print '(please use the following scale: 0=<b>'+mintag+'</b>, 5=<b>'+midtag+'</b>, 10=<b>'+maxtag+'</b>)' 
+		print '<div style="padding: 10px;">%s<input style="width:500px;" type="range" name="response" value="5" min="0" max="10" step="1" id="slider1"/>%s</div>'%(mintag,maxtag)
 	else:
 		make_checkarray(emolist)
 	
