@@ -6,14 +6,15 @@ import cPickle as p
 from random import randint, shuffle
 from ast import literal_eval
 from qs import questions
-from getdims import extractdims
+import getdims
+
 
 myform=cgi.FieldStorage()
 cgitb.enable()
 cursor = MySQLdb.connect(host="localhost",user="askerry",passwd="password",db="aesbehave").cursor()
 print 'Content-type:text/html\n\n'
 dimfile='appraisals.csv'
-[minindex,midindex,maxindex,Qindex,qlabelindex,qnumindex,dimdata,numdims]=extractdims(dimfile)
+[minindex,midindex,maxindex,Qindex,qlabelindex,qnumindex,dimdata,numdims]=getdims.extractdims(dimfile)
 dnums=[]
 for dim in dimdata:
     dnums.append(dim[qnumindex])
@@ -116,7 +117,7 @@ print '''
 <input type="text" name="subjid">
 <br>
 <input type="hidden" name="qindex" value="'''+qindex+'''">
-<input type="hidden" name="qnums" value="'''+dnumlist+'''">
+<input type="hidden" name="dnums" value="'''+dnumlist+'''">
 <input type="submit" value="Continue" /></center>
 <br><br><br><br>
 </form>

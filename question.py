@@ -7,7 +7,7 @@ from random import randint, shuffle
 from ast import literal_eval
 from qs import questions, names, emolist, itemlabels
 from slist import subjects, keycodes
-from getdims import extractdims
+import getdims
 import math
 
 myform=cgi.FieldStorage()
@@ -15,7 +15,7 @@ cgitb.enable()
 cursor = MySQLdb.connect(host="localhost",user="askerry",passwd="password",db="aesbehave").cursor()
 print 'Content-type:text/html\n\n'
 dimfile='appraisals.csv'
-[minindex,midindex,maxindex,Qindex,qlabelindex,qnumindex,dimdata,numdims]=extractdims(dimfile)
+[minindex,midindex,maxindex,Qindex,qlabelindex,qnumindex,dimdata,numdims]=getdims.extractdims(dimfile)
 
 
 #cgitb.enable(display=0, logdir="/path/to/logdir")
@@ -35,8 +35,8 @@ if subjid in subjects:
 	subjindex=subjects.index(subjid)
 	match=1
 	keycode=keycodes[subjindex]
-      questionID=subjid[subjid.index('q'):subjid.index('q')+3]
-      qnum=int(questionID[1:])-1
+      	questionID=subjid[subjid.index('q'):subjid.index('q')+3]
+      	qnum=int(questionID[1:])-1
 else: 
 	match=0
 if match==0:	
@@ -44,26 +44,26 @@ if match==0:
 	print "The subject ID you have provided is incorrect. Please return to the previous page and re-enter the subject ID provided on your Mechanical Turk start page."
 else:
         #print "your id is correct <br>"
-      dnums=eval(myform['dnumlist'].value)
-      qindex=myform['qindex'].value
-      qindex=int(qindex)+1
-      dnum=dnums[qindex-1]
+      	dnums=eval(myform['dnums'].value)
+      	qindex=myform['qindex'].value
+      	qindex=int(qindex)+1
+      	dnum=dnums[qindex-1]
 	totalqpersubj=len(dnums)
-      thisdim=dimdata[dnum-1]
-      mintag=thisdim[minindex]
-      midtag=thisdim[midindex]
-      maxtag=thisdim[maxindex]
-      qlabel=thisdim[qlabelindex]
-      dquest=thisdim[Qindex]
-      dquest=question.replace('NAMEVAR', dquest)
-      question=questions[qnum]
+      	thisdim=dimdata[dnum-1]
+      	mintag=thisdim[minindex]
+      	midtag=thisdim[midindex]
+      	maxtag=thisdim[maxindex]
+      	qlabel=thisdim[qlabelindex]
+      	dquest=thisdim[Qindex]
+      	question=questions[qnum]
+	qname=names[qindex-1]
+      	dquest=dquest.replace('NAMEVAR', qname)
 	itemlabel=itemlabels[qnum]
-      print itemlabel
-      print questionID
-      qname=names[qindex-1]
-      question=question.replace('NAMEVAR', qname)
-      qindex=str(qindex)
-      dnumlist=str(dnums)
+      	print itemlabel
+      	print questionID
+      	question=question.replace('NAMEVAR', qname)
+      	qindex=str(qindex)
+      	dnumlist=str(dnums)
         if int(qindex)==1:
        		#add the person to the database:  "insert" command for new rows
        		cursor.execute('insert into NDE_dims (subjid) values (%s)',str(subjid))
@@ -77,11 +77,11 @@ else:
         else:
        		lastQ=str(dnums[int(qindex)-2])
        		keycode=myform['keycode'].value
-                  formindex=myform['rownum'].value
+                formindex=myform['rownum'].value
        		lastresponse=myform['response'].value
-                  lastitem=myform['item'].value
+                lastitem=myform['item'].value
        		qvar='q'+ lastQ+'_'
-                  qvardim=qvar+dimension
+                qvardim=qvar+dimension
        		qvaritem=qvar+dimension+'_emo'
        		sql='update NDE_dims set ' +qvardim +' ="'+lastresponse+'" where rownum="'+formindex+'"'
        		cursor.execute(sql)
@@ -118,6 +118,15 @@ else:
 	  //float:left; 
 	  background-color:#4852B7
 	}
+	.dimdiv {
+          height:80px; width:75%;
+          color:white;
+          //border-color:maroon;
+          //border-style:solid;
+          //border-width:1px;
+          //float:left;
+          background-color:#00FFFF
+        }
 	.label { 		 
 		 margin-left: 15px;
 		 margin-right: 15px;
@@ -147,12 +156,13 @@ else:
 		nextthing='demographics.py'       	
 	#print "main loop"
        	print "<center><b>Question %s/%s:</b><br><br>" % (qindex, totalqpersubj)
-       	print "<div class=questiondiv><center>%s <br><br>How does %s feel in this situation? <br></div> " % (question,qname)
-       	print '''
+       	print "<div class=questiondiv><center>%s <br><br></div> " % (question)
+	print "<div class=dimdiv><center><br>%s</div>" %(dquest)
+	print '''
         <div id="page_content" align="center">
         <form name="myform" action="%s" method="submit" onSubmit="return validate(myform)">
         <div class="radioLeft" align="center">
-        '''%(nextthing)
+        ''' %(nextthing)
 	def make_checkarray(emotionlist):
 		numemos=len(emotionlist)
 		#numcols=math.floor(math.sqrt(numemos))
@@ -172,13 +182,15 @@ else:
 			for e in c:
 				print e
 			print "</div>"
-	make_checkarray(emolist)
+	if dquest!="How is mary feeling":
+		print 'hello'
+		#print '(please use the following scale: 0=<b>'+mintag+'</b>, 5=<b>'+midtag+'</b>,10=<b>'+maxtag+'</b>)Ã 
+		#print '<div style="padding: 10px;">%s<input style="width:700px;" type="range" name="response" value="5" min="0" max="10" step="1" id="slider1"/>%s</div>'%(mintag,maxtag)
+	else:
+		make_checkarray(emolist)
+	
 	print '''
 	<br><br>
-	<p> If you feel that the situation is equally well described by a second word, or better described  <br> by a word that is not listed, please list alternative words here (optional). </p>
-        <input type="text" name="otherword1" >
-        <br><input type="text" name="otherword2">
-        <br><br>
         <input type="hidden" name="subjid" value="'''+subjid+'''">
 	<input type="hidden" name="item" value="'''+itemlabel+'''">
         <input type="hidden" name="keycode" value="'''+keycode+'''">       	
