@@ -57,7 +57,7 @@ else:
       	dquest=thisdim[Qindex]
       	question=questions[qnum]
 	emoans=emoanswers[qnum]
-	qname=names[qindex-1]
+	qname=names[qnum]
       	dquest=dquest.replace('NAMEVAR', qname)
 	itemlabel=itemlabels[qnum]
       	#print itemlabel
@@ -86,6 +86,8 @@ else:
 		qvardim=lastdim
 		qvaremo=lastdim+'_qemo'
        		qvaritem=lastdim+'_qlabel'
+		print qvardim
+		print lastresponse
        		sql='update NDE_dims set ' +qvardim +' ="'+lastresponse+'" where rownum="'+formindex+'"'
        		cursor.execute(sql)
        		sql='update NDE_dims set ' +qvaritem +' ="'+lastitem+'" where rownum="'+formindex+'"'
@@ -170,7 +172,9 @@ else:
 			for e in c:
 				print e
 			print '</div>'
-	if dquest!='How is mary feeling':
+	emoquest='How did NAMEVAR feel in this situation'
+	emoquest=emoquest.replace(NAMEVAR,qname)
+	if dquest!=qmoquest:
 		#print 'hello'
 		print '(please use the following scale: 0=<b>'+mintag+'</b>, 5=<b>'+midtag+'</b>, 10=<b>'+maxtag+'</b>)' 
 		print '<br><br><div style="padding: 10px;">%s<input style="width:500px;" type="range" name="response" value="5" min="0" max="10" step="1" id="slider1"/>%s</div>'%(mintag,maxtag)
