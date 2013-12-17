@@ -36,7 +36,13 @@ if subjid in subjects:
 	match=1
 	keycode=keycodes[subjindex]
       	questionID=subjid[subjid.index('q'):subjid.index('q')+3]
-      	qnum=int(questionID[1:])-1
+      	qnumstr=''
+	for i in questionID:
+		try:
+			qnumstr=qnumstr+str(int(i))
+		except:
+			pass
+	qnum=int(qnumstr)
 else: 
 	match=0
 if match==0:	
